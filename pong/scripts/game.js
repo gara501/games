@@ -136,7 +136,7 @@ class Game {
             let deltaY = this.ballActions.y - (this.paddle1Actions.y + (this.paddle1Actions.height/2));
             this.ballActions.speedY = deltaY * 0.30;
       } else {
-        this.score.player1++;
+        this.score.player2++;
         this.resetBall();
       }
 
@@ -147,7 +147,7 @@ class Game {
             let deltaY = this.ballActions.y - (this.paddle2Actions.y + (this.paddle2Actions.height/2));
             this.ballActions.speedY = deltaY * 0.30;
       } else {
-        this.score.player2++;
+        this.score.player1++;
         this.resetBall();
       }
       
