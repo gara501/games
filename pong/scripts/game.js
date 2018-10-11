@@ -170,9 +170,9 @@ class Game {
     if ((this.score.player1 === this.score.winning) ||
     (this.score.player2 === this.score.winning))  {
       if (this.score.player1 > this.score.player2) {
-        this.gameEnd.winner = 'Player 2 WIN';
-      } else {
         this.gameEnd.winner = 'Player 1 WIN';
+      } else {
+        this.gameEnd.winner = 'Player 2 WIN';
       }
       this.gameEnd.value = true;
       this.score.player1 = 0;
