@@ -1,8 +1,17 @@
+import Sounds from './sounds.js';
+
 class Game {
   constructor(){
     this.canvas = document.querySelector('#asteroids'); 
     this.context = this.canvas.getContext('2d');
     this.fps = 30;
+    let introSound = new Sounds();
+    this.backSound = introSound.createSound('back', true);
+    this.introSound = introSound.createSound('intro');
+    this.hitSound = introSound.createSound('hit');
+    this.winSound = introSound.createSound('win');
+    this.failSound = introSound.createSound('fail');
+
     let context = this.context;
     let canvas = this.canvas;
     this.gameEnd = {
@@ -20,7 +29,7 @@ class Game {
     this.score = {
       player1: 0,
       player2: 0,
-      winning: 3
+      winning: 10
     }
     
     this.paddle1Actions = {
@@ -38,7 +47,7 @@ class Game {
     const createBall = (obj) => ({
       ...obj,
       context: context,
-      canvas: canvas,    
+      canvas: canvas,
       x: 0,
       y: 50,
       radius: 10,
@@ -69,12 +78,36 @@ class Game {
       }
     };
 
+    
+
     this.ball = createBall();
-    this.initGame();
+    this.intro();
+
+    document.addEventListener('keydown', (evt) => {
+      evt.preventDefault();
+      if (evt.keyCode == 13) {
+        this.initGame();
+      }
+    });
+  }
+
+  intro() {
+    this.context.fillStyle = '#fff';
+    this.introSound.play();
+    this.context.font = "40px 'Roboto', cursive";
+    let introText = 'Ultra light PONG V1.0';
+    let introStart = 'Press enter to start';
+    this.context.fillText(introText, 
+      ((this.canvas.width/2) - (this.context.measureText(introText).width/2)),
+      ((this.canvas.height/2)) );
+    this.context.fillText(introStart, 
+        ((this.canvas.width/2) - (this.context.measureText(introStart).width/2)),
+        ((this.canvas.height/2)) + 100 );
   }
 
   initGame() {
-    
+    this.introSound.stop();
+    this.backSound.play();
     setInterval(()=> {
       this.renderS();
       this.moveBall();
@@ -89,6 +122,8 @@ class Game {
       if (this.gameEnd.value) {
         this.gameEnd.winner = '';
         this.gameEnd.value = false;
+        this.backSound.reset();
+        this.backSound.play();
       }
     })
   }
@@ -135,9 +170,14 @@ class Game {
             this.ballActions.speedX = -this.ballActions.speedX;
             let deltaY = this.ballActions.y - (this.paddle1Actions.y + (this.paddle1Actions.height/2));
             this.ballActions.speedY = deltaY * 0.30;
+            this.hitSound.play();
       } else {
         this.score.player1++;
         this.resetBall();
+        this.failSound.play();
+        if (this.score.player1 % 2 === 0) {
+          this.paddle1Actions.height = (this.paddle1Actions.height - 10);
+        }
       }
 
     } else if (this.ballActions.x <= 0) {
@@ -146,9 +186,11 @@ class Game {
             this.ballActions.speedX = -this.ballActions.speedX;
             let deltaY = this.ballActions.y - (this.paddle2Actions.y + (this.paddle2Actions.height/2));
             this.ballActions.speedY = deltaY * 0.30;
+            this.hitSound.play();
       } else {
         this.score.player2++;
         this.resetBall();
+        this.failSound.play();
       }
       
     }
@@ -177,7 +219,9 @@ class Game {
       this.gameEnd.value = true;
       this.score.player1 = 0;
       this.score.player2 = 0;
-      
+      this.paddle1Actions.height = 150;
+      this.backSound.stop();
+      this.winSound.play();
     } 
   }
 
