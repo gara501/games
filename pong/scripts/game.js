@@ -13,8 +13,8 @@ class Game {
     this.ballActions = {
       x: 5,
       y: 180,
-      speedX: 20,
-      speedY: 10
+      speedX: 10,
+      speedY: 5
     };
 
     this.score = {
@@ -110,9 +110,9 @@ class Game {
 
   computerMove() {
     if (this.paddle2Actions.y < this.ballActions.y) {
-      this.paddle2Actions.y += 5;
+      this.paddle2Actions.y += 7;
     } else {
-      this.paddle2Actions.y -= 5;
+      this.paddle2Actions.y -= 7;
     }
   }
 
@@ -134,7 +134,7 @@ class Game {
         this.ballActions.y < (this.paddle2Actions.y + this.paddle2Actions.height)) {
             this.ballActions.speedX = -this.ballActions.speedX;
             let deltaY = this.ballActions.y - (this.paddle1Actions.y + (this.paddle1Actions.height/2));
-            this.ballActions.speedY = deltaY * 0.40;
+            this.ballActions.speedY = deltaY * 0.30;
       } else {
         this.score.player1++;
         this.resetBall();
@@ -145,7 +145,7 @@ class Game {
           this.ballActions.y < (this.paddle1Actions.y + this.paddle1Actions.height)) {
             this.ballActions.speedX = -this.ballActions.speedX;
             let deltaY = this.ballActions.y - (this.paddle2Actions.y + (this.paddle2Actions.height/2));
-            this.ballActions.speedY = deltaY * 0.40;
+            this.ballActions.speedY = deltaY * 0.30;
       } else {
         this.score.player2++;
         this.resetBall();
